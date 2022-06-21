@@ -19,7 +19,7 @@ class ButtomNavigationBar extends StatelessWidget {
             icon: Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
+            icon: Icon(Icons.location_on_outlined),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outlined),

@@ -22,7 +22,7 @@ class AppBarDesign extends StatelessWidget with PreferredSizeWidget {
               },
               icon: const Icon(
                 Icons.arrow_back_ios,
-                color: Colors.lightGreen,
+                color: Colors.black,
               ),
             )
           : null,
