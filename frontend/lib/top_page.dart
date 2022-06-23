@@ -31,6 +31,7 @@ class TopPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                const SizedBox(height: 10.0),
                 Expanded(flex: 4, child: Container()),
                 TextButton(
                   onPressed: () {
@@ -38,11 +39,6 @@ class TopPage extends StatelessWidget {
                         context: context,
                         enableDrag: true,
                         isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(10.0),
-                          ),
-                        ),
                         builder: (context) => SizedBox(
                               height: MediaQuery.of(context).size.height * 0.95,
                               child: const LoginPage(),
