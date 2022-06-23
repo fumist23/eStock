@@ -31,6 +31,7 @@ class TopPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                const SizedBox(height: 10.0),
                 Expanded(flex: 4, child: Container()),
                 TextButton(
                   onPressed: () {

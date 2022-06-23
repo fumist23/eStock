@@ -5,8 +5,8 @@ import 'package:flutter_application_2/user_page.dart';
 
 import '../home_page.dart';
 
-class ButtomNavigationBar extends StatelessWidget {
-  const ButtomNavigationBar({Key? key}) : super(key: key);
+class BottomNavigation extends StatelessWidget {
+  const BottomNavigation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
