@@ -14,6 +14,8 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    print(size.width);
     return Scaffold(
       appBar: AppBarDesign(
         title: 'Post',
@@ -26,45 +28,54 @@ class _PostPageState extends State<PostPage> {
             child: Column(
               children: [
                 Expanded(flex: 1, child: Container()),
-                Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.grey),
-                  child: const Center(
-                    child: Icon(Icons.photo_outlined),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 350,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.grey),
+                    child: const Center(
+                      child: Icon(Icons.photo_outlined),
+                    ),
                   ),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-                  child: CupertinoTextField(
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(100),
-                    ],
-                    placeholder: 'Location',
-                    keyboardType: TextInputType.multiline,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8.0),
+                  child: SizedBox(
+                    height: 45,
+                    child: CupertinoTextField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(100),
+                      ],
+                      placeholder: 'Location',
+                      keyboardType: TextInputType.multiline,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      prefix: const Icon(Icons.location_on_outlined),
                     ),
-                    prefix: const Icon(Icons.location_on_outlined),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: CupertinoTextField(
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(1000),
-                    ],
-                    placeholder: 'Comment',
-                    keyboardType: TextInputType.multiline,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8.0),
+                  child: SizedBox(
+                    height: 45,
+                    child: CupertinoTextField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(1000),
+                      ],
+                      placeholder: 'Comment',
+                      keyboardType: TextInputType.multiline,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      prefix: const Icon(Icons.comment_outlined),
                     ),
-                    prefix: const Icon(Icons.comment_outlined),
                   ),
                 ),
                 Padding(
