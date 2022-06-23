@@ -14,8 +14,6 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    print(size.width);
     return Scaffold(
       appBar: AppBarDesign(
         title: 'Post',
