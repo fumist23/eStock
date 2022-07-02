@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1036812297966",
+    "project_id": "estock-b3daf",
+    "storage_bucket": "estock-b3daf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036812297966:android:aab43da07775217c70b5ff",
+        "android_client_info": {
+          "package_name": "com.example.eStock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036812297966-f3b037juodgfm8h18tsnda7go2cb8hau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAn6Ks20w7i2FD5AyPlKbLWIkhwSL9ddQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036812297966-f3b037juodgfm8h18tsnda7go2cb8hau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1036812297966-53dg40sjqdp0am6cqmvr55fudn25ep51.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eStock"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
