@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/map_page.dart';
-import 'package:flutter_application_2/user_page.dart';
+import 'package:flutter_application_2/view/map_page.dart';
+import 'package:flutter_application_2/view/user_page.dart';
 
-import '../home_page.dart';
+import '../view/home_page.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({Key? key}) : super(key: key);
