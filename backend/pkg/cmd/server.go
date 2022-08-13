@@ -66,8 +66,8 @@ func (s *serverApp) run() error {
 		// TODO: log
 	case <-signalCh:
 		log.Println("Received signal.")
-		const delay = 20 * time.Second
-		log.Printf("Pre shhutdown.")
+		const delay = 10 * time.Second
+		log.Printf("Pre shutdown.")
 		time.Sleep(delay)
 	}
 	log.Println("Server is stopping...")
