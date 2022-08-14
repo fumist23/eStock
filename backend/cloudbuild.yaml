@@ -1,0 +1,50 @@
+steps:
+  - id: "Download dependencies"
+    name: golang:1.19.0
+    args: ["go", "mod", "download"]
+  - id: "Install linting tools"
+    name: golang:1.19.0
+    args: ["go", "install", "golang.org/x/tools/cmd/goimports@latest"]
+  - id: "Lint"
+    name: golang:1.19.0
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+        goimports -l . 2>&1 | tee /dev/stderr | (! read)
+  - id: "Run Unit Tests"
+    name: golang:1.19.0
+    args: ["go", "test", "-v", "./..."]
+  - id: "Build Container Image"
+    name: "gcr.io/k8s-skaffold/pack"
+    entrypoint: pack
+    args:
+      - build
+      - "--builder=gcr.io/buildpacks/builder:v1"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+  - id: "Push Container Image"
+    name: "gcr.io/cloud-builders/docker:latest"
+    args:
+      - push
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+  - id: Deploy to Cloud Run
+    name: gcr.io/cloud-builders/gcloud:latest
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+        gcloud run deploy ${_SERVICE_NAME}-$BUILD_ID \
+          --image $_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
+          --region ${_DEPLOY_REGION} \
+          --no-allow-unauthenticated
+
+substitutions:
+  _GCR_HOSTNAME: asia-northeast1-docker.pkg.dev/estock-353714/estock-backend
+  _SERVICE_NAME: estock-backend
+  _DEPLOY_REGION: asia-northeast1
+  _REPOSITORY: estock-backend
+
+options:
+  volumes:
+    - name: go-modules
+      path: /go
