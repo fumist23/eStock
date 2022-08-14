@@ -12,30 +12,30 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/spf13/cobra"
+	"github.com/kelseyhightower/envconfig"
 	"golang.org/x/sync/errgroup"
 )
 
-type serverApp struct {
-	*cobra.Command
-	port int
+type config struct {
+	projectID string `required:"true"`
+	port      int    `default:"8080"`
 }
 
-func newServerApp() *serverApp {
-	const (
-		fport = "port"
-	)
-	cmd := &cobra.Command{
-		Use:   "serverApp",
-		Short: "run server app",
-	}
-	app := &serverApp{Command: cmd}
-	cmd.Flags().IntVar(&app.port, fport, 8080, "port to listen")
+type serverApp struct {
+	projectID string
+	port      int
+}
 
-	app.RunE = func(cmd *cobra.Command, args []string) error {
-		return app.run()
+func newServerApp() (*serverApp, error) {
+	var cfg config
+	if err := envconfig.Process("", &cfg); err != nil {
+		return nil, fmt.Errorf("new server app err: %w", err)
 	}
-	return app
+
+	return &serverApp{
+		projectID: cfg.projectID,
+		port:      cfg.port,
+	}, nil
 }
 
 func (s *serverApp) run() error {
