@@ -65,7 +65,8 @@ func (s *serverApp) run() error {
 	case <-egctx.Done():
 		// TODO: log
 	case <-signalCh:
-		log.Println("Received signal.")
+		sig := <-signalCh
+		log.Printf("Received signal. signalCh: %s", sig)
 		const delay = 10 * time.Second
 		log.Printf("Pre shutdown.")
 		time.Sleep(delay)
