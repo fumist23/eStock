@@ -33,7 +33,7 @@ steps:
     args:
       - "-c"
       - |
-        gcloud run deploy ${_SERVICE_NAME}-$BUILD_ID \
+        gcloud run deploy ${_SERVICE_NAME} \
           --image $_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA \
           --region ${_DEPLOY_REGION} \
           --no-allow-unauthenticated
