@@ -21,12 +21,12 @@ steps:
     args:
       - build
       - "--builder=gcr.io/buildpacks/builder:v1"
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_GCR_REPOSITORY_NAME/$_SERVICE_NAME:$COMMIT_SHA"
   - id: "Push Container Image"
     name: "gcr.io/cloud-builders/docker:latest"
     args:
       - push
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_GCR_REPOSITORY_NAME/$_SERVICE_NAME:$COMMIT_SHA"
   - id: Deploy to Cloud Run
     name: gcr.io/cloud-builders/gcloud:latest
     entrypoint: /bin/bash
@@ -34,7 +34,7 @@ steps:
       - "-c"
       - |
         gcloud run deploy ${_SERVICE_NAME} \
-          --image $_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA \
+          --image $_GCR_HOSTNAME/$PROJECT_ID/$_GCR_REPOSITORY_NAME/$_SERVICE_NAME:$COMMIT_SHA \
           --region ${_DEPLOY_REGION} \
           --no-allow-unauthenticated
 
@@ -42,7 +42,7 @@ substitutions:
   _GCR_HOSTNAME: asia-northeast1-docker.pkg.dev
   _SERVICE_NAME: estock-backend
   _DEPLOY_REGION: asia-northeast1
-  _REPOSITORY: estock-backend
+  _GCR_REPOSITORY_NAME: estock-backend
 
 options:
   volumes:
