@@ -17,8 +17,8 @@ import (
 )
 
 type config struct {
-	projectID string `required:"true"`
-	port      int    `default:"8080"`
+	ProjectID string `envconfig:"PROJECT_ID" required:"true"`
+	Port      int    `default:"8080"`
 }
 
 type serverApp struct {
@@ -31,10 +31,11 @@ func newServerApp() (*serverApp, error) {
 	if err := envconfig.Process("", &cfg); err != nil {
 		return nil, fmt.Errorf("new server app err: %w", err)
 	}
+	log.Printf("cfg: %+v", &cfg)
 
 	return &serverApp{
-		projectID: cfg.projectID,
-		port:      cfg.port,
+		projectID: cfg.ProjectID,
+		port:      cfg.Port,
 	}, nil
 }
 
@@ -67,7 +68,7 @@ func (s *serverApp) run() error {
 	case <-signalCh:
 		sig := <-signalCh
 		log.Printf("Received signal. signalCh: %s", sig)
-		const delay = 10 * time.Second
+		const delay = 5 * time.Second
 		log.Printf("Pre shutdown.")
 		time.Sleep(delay)
 	}
