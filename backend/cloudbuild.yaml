@@ -13,9 +13,11 @@ steps:
       - "-c"
       - |
         goimports -l . 2>&1 | tee /dev/stderr | (! read)
+    dir: ./backend
   - id: "Run Unit Tests"
     name: golang:1.19.0
     args: ["go", "test", "-v", "./..."]
+    dir: ./backend
   - id: "Build Container Image"
     name: "gcr.io/k8s-skaffold/pack"
     entrypoint: pack
@@ -23,11 +25,13 @@ steps:
       - build
       - "--builder=gcr.io/buildpacks/builder:v1"
       - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA"
+    dir: ./backend
   - id: "Push Container Image"
     name: "gcr.io/cloud-builders/docker:latest"
     args:
       - push
       - "$_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA"
+    dir: ./backend
   - id: Deploy to Cloud Run
     name: gcr.io/cloud-builders/gcloud:latest
     entrypoint: /bin/bash
@@ -38,6 +42,7 @@ steps:
           --image $_GCR_HOSTNAME/$PROJECT_ID/$_REPOSITORY/$_SERVICE_NAME:$COMMIT_SHA \
           --region ${_DEPLOY_REGION} \
           --no-allow-unauthenticated
+    dir: ./backend
 
 substitutions:
   _GCR_HOSTNAME: asia-northeast1-docker.pkg.dev
