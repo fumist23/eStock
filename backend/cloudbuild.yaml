@@ -2,7 +2,7 @@ steps:
   - id: "Download dependencies"
     name: golang:1.19.0
     args: ["go", "mod", "download"]
-    dir: /backend
+    dir: ./backend
   - id: "Install linting tools"
     name: golang:1.19.0
     args: ["go", "install", "golang.org/x/tools/cmd/goimports@latest"]
