@@ -15,7 +15,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   google_fonts: ^3.0.1
-  firebase_core: ^1.18.0
+  firebase_core: ^1.22.0
+  
   
 
 dev_dependencies:
