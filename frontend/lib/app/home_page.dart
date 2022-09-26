@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/view/post_page.dart';
+import 'package:flutter_application_2/app/post_page.dart';
+
 
 import 'package:google_fonts/google_fonts.dart';
 

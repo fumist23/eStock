@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_2/component/appbar_design.dart';
+import 'package:flutter_application_2/app/component/appbar_design.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class PostPage extends StatefulWidget {

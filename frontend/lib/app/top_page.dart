@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/view/login_page.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'auth/login_page.dart';
+import 'auth/signin_page.dart';
+import 'package:flutter_application_2/app/home_page.dart';
 
 class TopPage extends StatelessWidget {
   const TopPage({Key? key}) : super(key: key);
@@ -35,17 +40,46 @@ class TopPage extends StatelessWidget {
                 Expanded(flex: 4, child: Container()),
                 TextButton(
                   onPressed: () {
-                    showModalBottomSheet(
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => HomePage())));
+                  },
+                  child: const Text(
+                    'ホーム(仮)',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showCupertinoModalBottomSheet(
                         context: context,
                         enableDrag: true,
-                        isScrollControlled: true,
-                        builder: (context) => SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.95,
-                              child: const LoginPage(),
+                        builder: (context) => const SizedBox(
+                              child: LoginPage(),
                             ));
                   },
                   child: const Text(
                     'Login',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    'or',
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showCupertinoModalBottomSheet(
+                        context: context,
+                        enableDrag: true,
+                        builder: (context) => SizedBox(
+                              child: SignInPage(),
+                            ));
+                  },
+                  child: const Text(
+                    'Signup',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),

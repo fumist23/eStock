@@ -13,9 +13,20 @@ dependencies:
   flutter:
     sdk: flutter
 
+
+
   cupertino_icons: ^1.0.2
+  modal_bottom_sheet: ^2.1.2
   google_fonts: ^3.0.1
+
+  #firebase
   firebase_core: ^1.22.0
+  firebase_auth: ^3.10.0
+
+  hooks_riverpod: ^1.0.4
+  flutter_hooks: ^0.18.5+1
+
+  freezed_annotation: ^2.1.0
   
   
 
@@ -25,6 +36,9 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
 
+  json_serializable: ^6.4.0
+  build_runner: ^2.2.1
+  freezed_annotation: ^2.1.0
 
 flutter:
 
