@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app/component/appbar_design.dart';
 import 'package:flutter_application_2/app/component/bottom_navigation.dart';
+import 'package:flutter_application_2/app/custom_exception.dart';
 
 class SignInPage extends StatefulWidget {
   SignInPage({Key? key}) : super(key: key);
@@ -29,10 +30,8 @@ class _SignInPageState extends State<SignInPage> {
           context,
           MaterialPageRoute(builder: ((context) => const BottomNavigation())),
           ((_) => false));
-    } catch (e) {
-      setState(() {
-        infoText = "something wrong";
-      });
+    } on FirebaseAuthException catch (e) {
+      throw CustomException(message: e.message);
     }
   }
 
