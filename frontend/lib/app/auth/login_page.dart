@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app/component/appbar_design.dart';
-
+import 'package:flutter_application_2/app/component/bottom_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,6 +14,31 @@ class _LoginPageState extends State<LoginPage> {
   String infoText = '';
   String email = '';
   String password = '';
+
+//todo riverpodを使ってviewmodelへの切り分け
+  Future<void> _onPressed() async {
+    try {
+      // メール/パスワードでログイン
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final UserCredential result = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final User user = result.user!;
+      setState(() {
+        infoText = "ログインOK：${user.email}";
+      });
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: ((context) => BottomNavigation())),
+          ((_) => false));
+    } catch (e) {
+      setState(() {
+        infoText = "something wrong";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 // ユーザー登録ボタン
                 child: ElevatedButton(
                   child: const Text('ログイン'),
-                  onPressed: () {},
+                  onPressed: _onPressed,
                 ),
               )
             ],
