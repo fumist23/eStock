@@ -1,0 +1,4 @@
+builds:
+  - id: backend
+    dir: .
+    main: ./cmd/server
