@@ -46,7 +46,7 @@ steps:
 
 substitutions:
   _GCR_HOSTNAME: asia-northeast1-docker.pkg.dev
-  _SERVICE_NAME: estock-backend
+  _SERVICE_NAME: server
   _DEPLOY_REGION: asia-northeast1
   _REPOSITORY: estock-backend
 
