@@ -1,41 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/auth/auth_view_model.dart';
 import 'package:flutter_application_2/app/component/appbar_design.dart';
 import 'package:flutter_application_2/app/component/bottom_navigation.dart';
-import 'package:flutter_application_2/app/custom_exception.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   String infoText = '';
   String email = '';
   String password = '';
-
-//todo riverpodを使ってviewmodelへの切り分け
   Future<void> _onPressed() async {
-    try {
-      // メール/パスワードでログイン
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final UserCredential result = await auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final User user = result.user!;
-      setState(() {
-        infoText = "ログインOK：${user.email}";
-      });
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: ((context) => const BottomNavigation())),
-          ((_) => false));
-    } on FirebaseAuthException catch (e) {
-      throw CustomException(message: e.message);
-    }
+    await ref
+        .watch(authViewModelProvider)
+        .signInWithEmailAndPassword(email: email, password: password);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: ((context) => const BottomNavigation())),
+        (route) => false);
   }
 
   @override
@@ -50,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // メールアドレス入力
               TextFormField(
                 decoration: const InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
@@ -59,7 +45,6 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
               ),
-              // パスワード入力
               TextFormField(
                 decoration: const InputDecoration(labelText: 'パスワード'),
                 obscureText: true,

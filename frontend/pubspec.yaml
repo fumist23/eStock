@@ -27,6 +27,7 @@ dependencies:
   flutter_hooks: ^0.18.5+1
 
   freezed_annotation: ^2.1.0
+  provider: ^6.0.3
   
   
 
