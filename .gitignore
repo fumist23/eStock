@@ -69,3 +69,10 @@ app.*.map.json
 /android/app/release
 
 server
+
+#Firebase
+android/**/google-services.json
+ios/**/GoogleService-Info.plist
+
+#Runner
+ios/Runner
