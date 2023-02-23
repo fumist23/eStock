@@ -1,21 +1,21 @@
 steps:
   - id: "Download dependencies"
-    name: golang:1.19.0
+    name: golang:1.20.0
     args: ["go", "mod", "download"]
     dir: ./backend
   - id: "Install linting tools"
-    name: golang:1.19.0
-    args: ["go", "install", "golang.org/x/tools/cmd/goimports@latest"]
+    name: golang:1.20.0
+    args: ["go", "install", "github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2"]
   - id: "Lint"
-    name: golang:1.19.0
+    name: golang:1.20.0
     entrypoint: /bin/bash
     args:
       - "-c"
       - |
-        goimports -l . 2>&1 | tee /dev/stderr | (! read)
+        golangci-lint run
     dir: ./backend
   - id: "Run Unit Tests"
-    name: golang:1.19.0
+    name: golang:1.20.0
     args: ["go", "test", "-v", "./..."]
     dir: ./backend
   - id: "Build Container Image"
