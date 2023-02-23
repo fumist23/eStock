@@ -62,6 +62,8 @@ func (s *serverApp) run() error {
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
+	defer signal.Stop(signalCh)
+
 	select {
 	case <-egctx.Done():
 		// TODO: log
