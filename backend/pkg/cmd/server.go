@@ -75,7 +75,5 @@ func (s *serverApp) run() error {
 		time.Sleep(delay)
 	}
 	log.Println("Server is stopping...")
-	os.Exit(1)
-
 	return group.Wait()
 }
