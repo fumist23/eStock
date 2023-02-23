@@ -1,0 +1,40 @@
+run:
+  tests: false
+  allow-parallel-runners: true
+  go: '1.20'
+  timeout: 5m
+
+output:
+  print-issued-lines: false
+  sort-results: true
+
+linters:
+  enable-all: true
+  # deprecated になっているもの etc... を disable
+  # ref: https://golangci-lint.run/usage/linters/
+  # disable:
+    # - gci # goimports-reviserと競合するため無効化
+    # - gochecknoglobals # グローバル変数を検出し一部の例外を除きエラーとするルール。特に便利でもないので無効化
+    # - godox # TODOコメント等、使用したい場面もありそなので無効化
+    # - golint # メンテが終了しており、staticcheckで同じ検査ができるため無効化
+    # - ifshort # error handling の際に、one liner で記載しているかチェックするルール。気に食わないので無効化
+    # - interfacer # メンテが終了しており、特に便利でもないので無効化
+    # - ireturn # Accept Interfaces, Return Concrete Types。インターフェースを返すパターンも多々あるので無効化
+    # - lll # 横に並ぶ文字数をチェックするルール。そこまでする？って思ったため無効化
+    # - maligned # 構造体が最適なレイアウトになっているかチェックするルール。特に便利でもないので無効化
+    # - nlreturn # リターンの前に改行してるかチェックするルール。特に便利でもないので無効化
+    # - scopelint # メンテが終了しており、exportloopref で同じ検査ができるため無効化
+    # - varnamelen # 変数の文字数チェックするルール。そこまでする？って思ったため無効化
+    # - wrapcheck # errorのwrapをしてるかチェックするルール。しないパターンも多々あるので無効化
+    # - wsl # gofmt で同じ検査ができるため無効化
+    # - execinquery # 入れるとバグる
+    # - exhaustivestruct # メンテが終了しており、exhaustruct で同じ検査ができるため無効化
+    # - gomnd # マジックナンバーを検出するルール。わざわざ変数定義する必要のなさそうな場面でも検出され、騒がしいので無効化
+    # - nosnakecase # スネークケースを検出するルール。Protoから自動で吐かれたやつでも検出され、騒がしいので無効化
+    # - interfacebloat # interface の method 数を制限する。設計思想に即さないことが多いので、無効化
+    # - deadcode # メンテが終了しており、unused で同じ検査ができるため無効化
+    # - structcheck # メンテが終了しており、unused で同じ検査ができるため無効化
+    # - varcheck # メンテが終了しており、unused で同じ検査ができるため無効化
+    # - funlen # 極力、関数でやるべきscopeは狭めるべきだが、どうしてもexhaustructとかを考慮すると長さはしょうがない部分が出てくるため無効化
+    # - cyclop # Cognitive Complexityの方のlintがあるし、Cognitive Complexityで十分やろ感もあるので無効化
+    # - musttag # 運用的に必要ない箇所や外部パッケージにもwarningが出てしまうので無効化
