@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +15,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
 
-	// _ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -73,6 +74,14 @@ func (s *serverApp) run() error {
 	})
 	log.Println("Server is started...")
 
+	group.Go(func() error {
+		err := initDB(egctx)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
 
@@ -89,4 +98,18 @@ func (s *serverApp) run() error {
 	log.Println("Server is stopping...")
 	srv.Shutdown(ctx)
 	return group.Wait()
+}
+
+func initDB(ctx context.Context) error {
+	db, err := sql.Open("sqlite3", "./db/estock.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	if err := db.PingContext(ctx); err != nil {
+		log.Fatal(err)
+	}
+
+	return nil
 }
