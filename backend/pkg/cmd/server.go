@@ -12,31 +12,38 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/kelseyhightower/envconfig"
+	"github.com/spf13/cobra"
+
+	// _ "github.com/mattn/go-sqlite3"
 	"golang.org/x/sync/errgroup"
 )
 
-type config struct {
-	ProjectID string `envconfig:"PROJECT_ID" required:"true"`
-	Port      int    `default:"8080"`
-}
-
 type serverApp struct {
-	projectID string
+	*cobra.Command
 	port      int
+	projectID string
 }
 
-func newServerApp() (*serverApp, error) {
-	var cfg config
-	if err := envconfig.Process("", &cfg); err != nil {
-		return nil, fmt.Errorf("new server app err: %w", err)
+func newServerApp() *serverApp {
+	const (
+		fport      = "port"
+		fprojectID = "project_id"
+	)
+	cmd := &cobra.Command{
+		Use:   "serverApp",
+		Short: "serverApp is a server application.",
 	}
-	log.Printf("cfg: %+v", &cfg)
+	app := &serverApp{
+		Command: cmd,
+	}
+	cmd.Flags().IntVar(&app.port, fport, 8080, "port number")
+	cmd.Flags().StringVar(&app.projectID, fprojectID, "estock", "project id")
 
-	return &serverApp{
-		projectID: cfg.ProjectID,
-		port:      cfg.Port,
-	}, nil
+	app.RunE = func(cmd *cobra.Command, args []string) error {
+		return app.run()
+	}
+
+	return app
 }
 
 func (s *serverApp) run() error {
@@ -51,22 +58,27 @@ func (s *serverApp) run() error {
 	})
 
 	group, egctx := errgroup.WithContext(ctx)
+
+	port := fmt.Sprintf(":%d", s.port)
+	srv := &http.Server{
+		Addr:    port,
+		Handler: r,
+	}
 	group.Go(func() error {
-		if err := http.ListenAndServe(fmt.Sprintf(":%d", s.port), r); err != nil {
-			// TODO: log
-			return fmt.Errorf("cmd: %w", err)
+		err := srv.ListenAndServe()
+		if err == http.ErrServerClosed {
+			return nil
 		}
-		return nil
+		return err
 	})
 	log.Println("Server is started...")
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
-	defer signal.Stop(signalCh)
 
 	select {
 	case <-egctx.Done():
-		// TODO: log
+		log.Println("Context is done.")
 	case <-signalCh:
 		sig := <-signalCh
 		log.Printf("Received signal. signalCh: %s", sig)
@@ -75,5 +87,6 @@ func (s *serverApp) run() error {
 		time.Sleep(delay)
 	}
 	log.Println("Server is stopping...")
+	srv.Shutdown(ctx)
 	return group.Wait()
 }

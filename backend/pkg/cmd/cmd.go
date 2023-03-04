@@ -1,9 +1,10 @@
 package cmd
 
-func Excute() error {
-	serverApp, err := newServerApp()
-	if err != nil {
-		return err
-	}
-	return serverApp.run()
+import "github.com/spf13/cobra"
+
+func RegisterCommand(registry *cobra.Command) error {
+	registry.AddCommand(
+		newServerApp().Command,
+	)
+	return nil
 }
