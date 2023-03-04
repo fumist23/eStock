@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fumist23/eStock/pkg/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -59,10 +60,7 @@ func (s *serverApp) run() error {
 	r.Get("/echo", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("echo"))
 	})
-	r.Get("/users/{user_id}", func(w http.ResponseWriter, r *http.Request) {
-		userID := chi.URLParam(r, "user_id")
-		w.Write([]byte(userID))
-	})
+	r.Route("/users", user.NewRouter())
 
 	group, egctx := errgroup.WithContext(ctx)
 	group.Go(func() error {
@@ -83,6 +81,7 @@ func (s *serverApp) run() error {
 		}
 		return nil
 	})
+	srv.logger.Info("Database is initialized...")
 
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGTERM, syscall.SIGINT)
