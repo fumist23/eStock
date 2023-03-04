@@ -2,9 +2,6 @@ package cmd
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,10 +9,9 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
-	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -52,31 +48,37 @@ func (s *serverApp) run() error {
 	defer cancel()
 
 	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+	srv, cleanup, err := initializeServer(ctx, s, r)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
+	r.Use(newLogger(srv.logger))
 
 	r.Get("/echo", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("echo"))
 	})
+	r.Get("/users/{user_id}", func(w http.ResponseWriter, r *http.Request) {
+		userID := chi.URLParam(r, "user_id")
+		w.Write([]byte(userID))
+	})
 
 	group, egctx := errgroup.WithContext(ctx)
-
-	port := fmt.Sprintf(":%d", s.port)
-	srv := &http.Server{
-		Addr:    port,
-		Handler: r,
-	}
 	group.Go(func() error {
 		err := srv.ListenAndServe()
 		if err == http.ErrServerClosed {
 			return nil
 		}
+		srv.logger.Error("failed to listen and serve.", zap.Error(err))
 		return err
 	})
-	log.Println("Server is started...")
+	srv.logger.Info("Server is started...")
 
 	group.Go(func() error {
 		err := initDB(egctx)
 		if err != nil {
+			srv.logger.Error("failed to init db.", zap.Error(err))
 			return err
 		}
 		return nil
@@ -87,29 +89,16 @@ func (s *serverApp) run() error {
 
 	select {
 	case <-egctx.Done():
-		log.Println("Context is done.")
+		srv.logger.Error("Context is done.")
 	case <-signalCh:
 		sig := <-signalCh
-		log.Printf("Received signal. signalCh: %s", sig)
+		srv.logger.Info("Received signal.", zap.String("signal", sig.String()))
 		const delay = 5 * time.Second
-		log.Printf("Pre shutdown.")
+		srv.logger.Info("Pre shutdown.", zap.Duration("delay", delay))
 		time.Sleep(delay)
 	}
-	log.Println("Server is stopping...")
+
+	srv.logger.Info("Server is stopping...")
 	srv.Shutdown(ctx)
 	return group.Wait()
-}
-
-func initDB(ctx context.Context) error {
-	db, err := sql.Open("sqlite3", "./db/estock.db")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	if err := db.PingContext(ctx); err != nil {
-		log.Fatal(err)
-	}
-
-	return nil
 }
