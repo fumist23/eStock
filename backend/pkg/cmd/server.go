@@ -24,7 +24,7 @@ type serverApp struct {
 func newServerApp() *serverApp {
 	const (
 		fport      = "port"
-		fprojectID = "project_id"
+		fprojectID = "project-id"
 	)
 	cmd := &cobra.Command{
 		Use:   "serverApp",
