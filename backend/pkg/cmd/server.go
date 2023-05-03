@@ -10,37 +10,22 @@ import (
 
 	"github.com/fumist23/eStock/pkg/user"
 	"github.com/go-chi/chi/v5"
-	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
 	"golang.org/x/sync/errgroup"
 )
 
 type serverApp struct {
-	*cobra.Command
 	port      int
 	projectID string
 }
 
 func newServerApp() *serverApp {
-	const (
-		fport      = "port"
-		fprojectID = "project-id"
-	)
-	cmd := &cobra.Command{
-		Use:   "serverApp",
-		Short: "serverApp is a server application.",
-	}
+	config := newConfig()
 	app := &serverApp{
-		Command: cmd,
+		port:      config.Port,
+		projectID: config.ProjectID,
 	}
-	cmd.Flags().IntVar(&app.port, fport, 8080, "port number")
-	cmd.Flags().StringVar(&app.projectID, fprojectID, "estock", "project id")
-
-	app.RunE = func(cmd *cobra.Command, args []string) error {
-		return app.run()
-	}
-
 	return app
 }
 
@@ -74,7 +59,10 @@ func (s *serverApp) run() error {
 	srv.logger.Info("Server is started...")
 
 	group.Go(func() error {
-		err := initDB(egctx)
+		cleanup, err := initDB(egctx)
+		if cleanup != nil {
+			defer cleanup()
+		}
 		if err != nil {
 			srv.logger.Error("failed to init db.", zap.Error(err))
 			return err

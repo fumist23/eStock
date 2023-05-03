@@ -4,14 +4,10 @@ import (
 	"os"
 
 	"github.com/fumist23/eStock/pkg/cmd"
-	"github.com/spf13/cobra"
 )
 
 func main() {
-	c := &cobra.Command{}
-	cmd.RegisterCommand(c)
-	err := c.Execute()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		os.Exit(1)
 	}
 }

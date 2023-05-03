@@ -1,10 +1,8 @@
 package cmd
 
-import "github.com/spf13/cobra"
-
-func RegisterCommand(registry *cobra.Command) error {
-	registry.AddCommand(
-		newServerApp().Command,
-	)
+func Run() error {
+	if err := newServerApp().run(); err != nil {
+		return err
+	}
 	return nil
 }
