@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/kelseyhightower/envconfig"
 )
@@ -14,6 +14,6 @@ type Config struct {
 func newConfig() Config {
 	var config Config
 	envconfig.Process("", &config)
-	log.Print(config)
+	fmt.Printf("config: %+v", config)
 	return config
 }

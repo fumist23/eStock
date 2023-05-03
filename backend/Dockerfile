@@ -10,7 +10,7 @@ RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 
 COPY . ./
 
-RUN go build -mod=readonly -v -o server ./cmd/server/main.go
+RUN CGO_ENABLED=1 go build -mod=readonly -v -o server ./cmd/server/main.go
 
 FROM debian:buster-slim
 RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
