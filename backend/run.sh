@@ -2,7 +2,7 @@
 set -e
 
 # コンテナ起動時に持っているSQLiteのデータベースファイルは、後続処理でrestoreに成功したら削除したいのでrenameしておく
-if [ -f ./data.db ]; then
+if [ -f ./app/data.db ]; then
   mv ./app/db/estock.db ./app/db/estock.db.bk
 fi
 
