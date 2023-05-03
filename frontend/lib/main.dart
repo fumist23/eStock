@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'component/bottom_navigation.dart';
+import 'package:flutter_application_2/ui_components/bottom_navigation.dart';
 
 void main() {
   runApp(const MyApp());
