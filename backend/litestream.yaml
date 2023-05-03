@@ -1,0 +1,4 @@
+dbs:
+  - path: ./db/estock.db
+    replicas:
+      - url: gcs://estock-db/replicas
