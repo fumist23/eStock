@@ -20,7 +20,6 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
 COPY --from=builder /app/server /app/server
 COPY --from=builder /usr/local/bin/litestream /usr/local/bin/litestream
 COPY --from=builder /app/litestream.yaml /app/litestream.yaml
-COPY --from=builder /app/db/ /app/db/
 COPY --from=builder /app/run.sh /app/run.sh
 
 CMD ["sh", "/app/run.sh"]

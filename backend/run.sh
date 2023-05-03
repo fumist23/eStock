@@ -7,6 +7,7 @@ if [ -f ./app/data.db ]; then
 fi
 
 # GCSからrestore
+mkdir -p ./app/db
 litestream restore -if-replica-exists -config ./app/litestream.yaml ./app/db/estock.db
 
 if [ -f ./app/db/estock.db ]; then
