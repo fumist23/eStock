@@ -17,9 +17,10 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
     ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/server /app/server
+COPY --from=builder /app/server /server
 COPY --from=builder /usr/local/bin/litestream /usr/local/bin/litestream
-COPY --from=builder /app/litestream.yaml /app/litestream.yaml
-COPY --from=builder /app/run.sh /app/run.sh
+COPY --from=builder /app/db/estock.db /db/estock.db
+COPY --from=builder /app/litestream.yaml /litestream.yaml
+COPY --from=builder /app/run.sh /run.sh
 
-CMD ["sh", "/app/run.sh"]
+CMD ["sh", "/run.sh"]

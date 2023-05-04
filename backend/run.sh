@@ -1,23 +1,25 @@
 #!/bin/sh
 set -e
 
+
+echo "---- script started!! ----"
+
 # コンテナ起動時に持っているSQLiteのデータベースファイルは、後続処理でrestoreに成功したら削除したいのでrenameしておく
-if [ -f ./app/data.db ]; then
-  mv ./app/db/estock.db ./app/db/estock.db.bk
+if [ -f ./db/estock.db ]; then
+  mv ./db/estock.db ./db/estock.db.bk
 fi
 
 # GCSからrestore
-mkdir -p ./app/db
-litestream restore -if-replica-exists -config ./app/litestream.yaml ./app/db/estock.db
+litestream restore -if-replica-exists -config ./litestream.yaml ./db/estock.db
 
-if [ -f ./app/db/estock.db ]; then
+if [ -f ./db/estock.db ]; then
   # restoreに成功したら、renameしていたファイルを削除
   echo "---- Restored from Cloud Storage ----"
-  rm ./app/db/estock.db.bk
+  rm ./db/estock.db.bk
 else
   echo "---- Failed to restore from Cloud Storage ----"
-  mv ./app/db/estock.db.bk ./app/db/estock.db
+  mv ./db/estock.db.bk ./db/estock.db
 fi
 
 # メインプロセスでlitestreamの起動、サブプロセスにGoサーバーの起動を行う。
-exec litestream replicate -exec "./app/server" -config ./app/litestream.yaml
+exec litestream replicate -exec "./server" -config ./litestream.yaml
