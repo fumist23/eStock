@@ -10,7 +10,7 @@ import (
 )
 
 func initDB(ctx context.Context) (func(), error) {
-	db, err := sql.Open("sqlite3", "./db/estock.db")
+	db, err := sql.Open("sqlite3", "./database/estock.db")
 	if err != nil {
 		return nil, err
 	}
