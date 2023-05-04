@@ -18,5 +18,5 @@ else
   mv ./database/estock.db.old ./database/estock.db
 fi
 
-# メインプロセスでGoサーバーの起動、サブプロセスでlitestreamの起動を行う。
-exec ./server -exec "litestream replicate -config ./litestream.yaml"
+# メインプロセスでkitestreamの起動、サブプロセスでGoサーバーの起動を行う。
+exec litestream replicate -exec "./server" -config ./litestream.yaml
