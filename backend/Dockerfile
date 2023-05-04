@@ -17,7 +17,7 @@ RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -
 
 COPY --from=builder /app/server /server
 COPY --from=builder /usr/local/bin/litestream /usr/local/bin/litestream
-COPY --from=builder /app/estock.db /estock.db
+COPY --from=builder /app/database/estock.db /database/estock.db
 COPY --from=builder /app/litestream.yaml /litestream.yaml
 COPY --from=builder /app/run.sh /run.sh
 
