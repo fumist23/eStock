@@ -23,6 +23,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Scaffold(
       body: _pages[_pageIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
         currentIndex: _pageIndex,
         onTap: (int index) {
           setState(() {
@@ -32,15 +33,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "Home",
+            label: "ホーム",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            label: "Map",
+            label: "マップ",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: "User",
+            label: "マイページ",
           ),
         ],
       ),
